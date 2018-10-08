@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mvc.dao.SourceDAO">
+
+    <resultMap id="source" type="Source">
+        <id column="asourceId" property="sourceId"/>
+        <result column="asourceName" property="sourceName"/>
+        <result column="aparentId" property="parentId"/>
+        <collection property="sourceList" javaType="java.util.ArrayList" ofType="Source">
+            <id column="bsourceId" property="sourceId"/>
+            <result column="bsourceName" property="sourceName"/>
+            <result column="bparentId" property="parentId"/>
+            <collection property="sourceList" javaType="java.util.ArrayList" ofType="Source">
+                <id column="csourceId" property="sourceId"/>
+                <result column="csourceName" property="sourceName"/>
+                <result column="cparentId" property="parentId"/>
+            </collection>
+        </collection>
+    </resultMap>
+
+    <select id="testSource" resultMap="source">
+        SELECT a.source_id asourceId,a.source_name asourceName,a.parent_id aparentId,
+        b.source_id bsourceId,b.source_name bsourceName,b.parent_id bparentId,
+        c.source_id csourceId,c.source_name csourceName,c.parent_id cparentId
+        FROM source a
+        left JOIN source b
+        ON
+        b.parent_id = a.source_id
+        left JOIN source c
+        ON
+        c.parent_id = b.source_id
+        where a.parent_id is null OR a.parent_id = ''
+    </select>
+
+    <sql id="col">
+        source_id AS sourceId,
+        source_name AS sourceName,
+        parent_id AS parentId
+    </sql>
+
+    <select id="testSource1" resultType="Source">
+        SELECT
+        s.
+        <include refid="col"/>
+        FROM
+        source s
+    </select>
+
+</mapper>

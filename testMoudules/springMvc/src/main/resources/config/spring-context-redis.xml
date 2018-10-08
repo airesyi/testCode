@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:property-placeholder location="classpath:configValue/redis.properties" ignore-unresolvable="true"/>
+    <!--配置认证系统redis -->
+    <bean id="authRedis" class="com.bm.authentication.client.utils.AuthenticationRedisCacheUtil">
+        <!-- 设置redis url (sharded.jedis.address=host01:port,host02:port)-->
+        <property name="redisUrl" value="127.0.0.1:6379"/>
+        <!-- 设置redis密码 -->
+        <property name="redisPwd" value="root"/>
+    </bean>
+
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <!--最大空闲数-->
+        <property name="maxIdle" value="${redis.maxIdle}"/>
+        <!--最小空闲数-->
+        <property name="minIdle" value="${redis.minIdle}"/>
+        <!--连接池的最大数据库连接数  -->
+        <property name="maxTotal" value="${redis.maxTotal}"/>
+        <!--最大建立连接等待时间-->
+        <property name="maxWaitMillis" value="${redis.maxWaitMillis}"/>
+        <!--逐出连接的最小空闲时间 默认1800000毫秒(30分钟)-->
+        <property name="minEvictableIdleTimeMillis" value="${redis.minEvictableIdleTimeMillis}"/>
+        <!--每次逐出检查时 逐出的最大数目 如果为负数就是 : 1/abs(n), 默认3-->
+        <property name="numTestsPerEvictionRun" value="${redis.numTestsPerEvictionRun}"/>
+        <!--逐出扫描的时间间隔(毫秒) 如果为负数,则不运行逐出线程, 默认-1-->
+        <property name="timeBetweenEvictionRunsMillis" value="${redis.timeBetweenEvictionRunsMillis}"/>
+        <!--是否在从池中取出连接前进行检验,如果检验失败,则从池中去除连接并尝试取出另一个-->
+        <property name="testOnBorrow" value="${redis.testOnBorrow}"/>
+        <!--在空闲时检查有效性, 默认false  -->
+        <property name="testWhileIdle" value="${redis.testWhileIdle}"/>
+    </bean>
+
+
+    <bean id="jedis.shardInfo1" class="redis.clients.jedis.JedisShardInfo">
+        <constructor-arg index="0" value="${redis.hostName}"/>
+        <property name="password" value="${redis.password}"></property>
+    </bean>
+
+    <bean id="shardedJedisPool" class="redis.clients.jedis.ShardedJedisPool">
+        <constructor-arg index="0" ref="jedisPoolConfig"/>
+        <constructor-arg index="1">
+            <list>
+                <ref bean="jedis.shardInfo1"/>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <!--自定义redis工具类,在需要缓存的地方注入此类  -->
+    <bean id="redisCacheUtil" class="com.mvc.utils.RedisCacheUtil">
+        <property name="shardedJedisPool" ref="shardedJedisPool"/>
+    </bean>
+
+    <bean id="cusKeyGen" class="com.mvc.utils.CustomCacheKeyGenerator"/>
+
+    <bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
+        <property name="caches">
+            <set>
+                <bean class="com.mvc.utils.RedisSpringCache">
+                    <property name="redisCacheUtil" ref="redisCacheUtil"/>
+                    <property name="name" value="queueCache"/>
+                    <!--缓存有效时间，单位天，默认3天-->
+                    <property name="cache_timeout" value="3"/>
+                </bean>
+                <bean class="com.mvc.utils.MemSpringCache">
+                    <property name="name" value="memCache"/>
+                </bean>
+            </set>
+        </property>
+    </bean>
+
+    <bean id="cacheManager1" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+        <property name="cacheManager" ref="ehcacheManager"></property>
+    </bean>
+
+    <bean id="ehcacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="configLocation" value="classpath:ehcache-setting.xml"></property>
+    </bean>
+
+</beans>

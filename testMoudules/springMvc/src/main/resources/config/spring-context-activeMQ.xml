@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
+
+
+    <!-- 配置登出监听 -->
+    <!-- 配置JMS连接工厂,以有可以不配置 -->
+    <bean id="jmsFactory" class="org.apache.activemq.pool.PooledConnectionFactory"
+          destroy-method="stop">
+        <property name="connectionFactory">
+            <bean class="org.apache.activemq.ActiveMQConnectionFactory">
+                <!-- MQ连接 -->
+                <property name="brokerURL" value="tcp://127.0.0.1:61616"/>
+                <!-- MQ账户名 -->
+                <property name="userName" value="admin"/>
+                <!-- MQ密码 -->
+                <property name="password" value="admin"/>
+                <property name="useAsyncSend" value="true"/>
+            </bean>
+        </property>
+        <property name="maxConnections" value="100"></property>
+    </bean>
+
+    <!-- 配置，连接工厂 -->
+    <bean id="cacheConnectionFactory"
+          class="org.springframework.jms.connection.CachingConnectionFactory">
+        <property name="targetConnectionFactory" ref="jmsFactory"/>
+        <property name="sessionCacheSize" value="100"/>
+        <!-- 自定义监听链接id,建议使用：系统名_功能或对接jms服务器_三位数字序号-->
+        <property name="clientId" value="testJarTool"/>
+    </bean>
+
+    <!--
+        &lt;!&ndash; 配置消息队列监听者 &ndash;&gt;
+        <bean id="logoutListener" class="com.bm.authentication.client.listener.LogoutListener"/>
+
+        &lt;!&ndash; 监听容器 &ndash;&gt;
+        <bean id="logoutListenerContainer"
+              class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+            <property name="connectionFactory" ref="cacheConnectionFactory"/>
+            <property name="pubSubDomain" value="true"/>
+            &lt;!&ndash; 配置监听队列名称 &ndash;&gt;
+            <property name="destinationName" value="topic.authentication.logout"/>
+            &lt;!&ndash;消息持久化&ndash;&gt;
+            <property name="subscriptionDurable" value="true"/>
+            <property name="receiveTimeout" value="10000"/>
+            <property name="messageListener" ref="logoutListener"/>
+        </bean>
+    -->
+
+</beans>

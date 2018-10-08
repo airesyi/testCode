@@ -1,0 +1,12 @@
+#project
+*.class
+*.war
+classes
+target
+.DS_Store
+out
+.idea
+*.iml
+.classpath
+.project
+.settings
