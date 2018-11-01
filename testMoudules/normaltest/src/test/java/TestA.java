@@ -307,4 +307,23 @@ public class TestA {
         stringSet.toArray(strings);
         System.out.println(strings[1]);
     }
+
+    @Test
+    public void test19 () {
+        String a = "aaaaabbbbbb";
+        String b = a.replace("a", "b");
+
+        System.out.println(a);
+        System.out.println(b);
+    }
+
+    @Test
+    public void test20 () {
+        Set set = new HashSet();
+        set.add(null);
+        System.out.println(set.size());
+        set.remove(null);
+        System.out.println(set.size());
+    }
+
 }

@@ -30,9 +30,9 @@ public class LDAPTestCode {
         // 连接Ldap需要的信息
         String ldapFactory = "com.sun.jndi.ldap.LdapCtxFactory";
 //        String ldapUrl = "ldap://127.0.0.1:389";// url
-        String ldapUrl = "ldap://127.0.0.1:389";// url
-        String ldapAccount = "werqerwer"; // 用户名
-        String ldapPwd = "123456";//密码
+        String ldapUrl = "ldap://172.16.10.96:389";// url
+        String ldapAccount = "xinboxinmo//crmscaner"; // 用户名
+        String ldapPwd = "w3H!1GRx4G@u";//密码
         // 邮箱，域，直接账户名都可登陆
 //        String ldapAccount = "abc\\administrator"; // 用户名
 //        String ldapPwd = "123456";//密码
@@ -81,7 +81,7 @@ public class LDAPTestCode {
 
         List<String> result = new ArrayList<>();
 
-        scanLDAP("OU=gongsi,DC=gs,DC=com", result);
+        scanLDAP("OU=新博新美集团,DC=xinboxinmo,DC=com", result);
 
         System.out.println(result.size());
         System.out.println(result);
