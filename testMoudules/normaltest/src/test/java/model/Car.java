@@ -1,11 +1,18 @@
 package model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 
 /**
  * auth: shi yi
  * create date: 2018/9/6
  */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Car implements Cloneable , Serializable {
     private String mani;
     private int size;

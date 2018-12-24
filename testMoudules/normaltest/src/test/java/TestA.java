@@ -16,6 +16,7 @@ import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -284,12 +285,11 @@ public class TestA {
         }
 
 
-
     }
 
     @Test
-    public void test17 () {
-        String str="hello            song";
+    public void test17() {
+        String str = "hello            song";
 //        Pattern p = Pattern.compile("\\s+");
         String regex = " +";
         str.replaceAll(regex, "a");
@@ -297,7 +297,7 @@ public class TestA {
     }
 
     @Test
-    public void test18 () {
+    public void test18() {
         Set<String> stringSet = new HashSet<>();
         stringSet.add("a");
         stringSet.add("b");
@@ -309,7 +309,7 @@ public class TestA {
     }
 
     @Test
-    public void test19 () {
+    public void test19() {
         String a = "aaaaabbbbbb";
         String b = a.replace("a", "b");
 
@@ -318,12 +318,78 @@ public class TestA {
     }
 
     @Test
-    public void test20 () {
-        Set set = new HashSet();
-        set.add(null);
-        System.out.println(set.size());
-        set.remove(null);
-        System.out.println(set.size());
+    public void test20() {
+        String a = "123456";
+        System.out.println(a.substring(0, 6));
+    }
+
+    @Test
+    public void test21() {
+
+        String[] str = {"Java", "C++", "Php", "C#", "Python"};//增加ruby
+        List<String> list = new ArrayList<String>();
+        for (int i = 0; i < str.length; i++) {
+            list.add(str[i]);
+        }
+        list.add(2, "ruby");
+        String[] newStr = list.toArray(new String[2]); //返回一个包含所有对象的指定类型的数组
+        for (int i = 0; i < newStr.length; i++) {
+            System.out.println(newStr[i]);
+        }
+    }
+
+    @Test
+    public void test22() {
+        String a = "  f a s　d f   \nda   d\u3000f   ";
+        System.out.println(a);
+        System.out.println(a.replaceAll("[\\s\\p{Zs}]+", ""));
+    }
+
+    @Test
+    public void test23() {
+        Long l = 3L;
+        int i = 2;
+        System.out.println(l.doubleValue() / i);
+    }
+
+    @Test
+    public void test24() {
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        String todayStr = sdf.format(date);
+        System.out.println(todayStr);
+    }
+
+    @Test
+    public void test25() {
+        System.out.println(MD5(MD5("123")));
+    }
+
+    public static String MD5(String key) {
+        char hexDigits[] = {
+                '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
+        };
+        try {
+            byte[] btInput = key.getBytes();
+            // 获得MD5摘要算法的 MessageDigest 对象
+            MessageDigest mdInst = MessageDigest.getInstance("MD5");
+            // 使用指定的字节更新摘要
+            mdInst.update(btInput);
+            // 获得密文
+            byte[] md = mdInst.digest();
+            // 把密文转换成十六进制的字符串形式
+            int j = md.length;
+            char str[] = new char[j * 2];
+            int k = 0;
+            for (int i = 0; i < j; i++) {
+                byte byte0 = md[i];
+                str[k++] = hexDigits[byte0 >>> 4 & 0xf];
+                str[k++] = hexDigits[byte0 & 0xf];
+            }
+            return new String(str);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 }

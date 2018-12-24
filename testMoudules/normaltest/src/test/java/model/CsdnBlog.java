@@ -14,4 +14,6 @@ public class CsdnBlog {
     private String date;
     private String view;
     private String tag;
+    private Integer num;
+    private double price;
 }

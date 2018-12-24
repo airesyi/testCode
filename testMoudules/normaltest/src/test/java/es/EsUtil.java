@@ -33,14 +33,15 @@ public class EsUtil {
      */
     private static Client getClient() throws Exception {
         TransportClient client = new PreBuiltTransportClient(Settings.EMPTY)
-                .addTransportAddress(new TransportAddress(InetAddress.getByName("127.0.0.1"), 9300));
+                .addTransportAddress(new TransportAddress(InetAddress.getByName("172.16.38.30"), 9300));
         return client;
     }
 
     /**
      * 创建索引文件
      */
-    public static void createIndexFile() throws Exception {
+    @Test
+    public void createIndexFile() throws Exception {
         XContentBuilder mapping = XContentFactory.jsonBuilder()
                 .startObject()
                 .startObject("settings")

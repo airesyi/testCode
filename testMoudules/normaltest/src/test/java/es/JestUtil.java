@@ -1,6 +1,5 @@
 package es;
 
-import com.alibaba.fastjson.JSON;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import io.searchbox.client.JestClient;
@@ -82,9 +81,11 @@ public class JestUtil {
      */
     @Test
     public void createIndex() throws Exception {
-
-        JestResult jr = jestClient.execute(new CreateIndex.Builder(indexName).build());
+        CreateIndex createIndex = new CreateIndex.Builder(indexName).build();
+        System.out.println(createIndex.toString());
+        JestResult jr = jestClient.execute(createIndex);
         System.out.println(jr.isSucceeded());
+        System.out.println(jr.getJsonString());
     }
 
 
@@ -109,6 +110,7 @@ public class JestUtil {
 
         PutMapping putMapping = new PutMapping.Builder(indexName, typeName, source).build();
         JestResult jr = jestClient.execute(putMapping);
+        System.out.println(jr.getJsonString());
         System.out.println(jr.isSucceeded());
     }
 
@@ -126,7 +128,8 @@ public class JestUtil {
         csdnBlog1.setDate(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(new Date()));
         csdnBlog1.setView("100");
         csdnBlog1.setTag("JAVA,ANDROID,C++,LINUX");
-
+        csdnBlog1.setNum(100);
+        csdnBlog1.setPrice(120.12);
 
         CsdnBlog csdnBlog2 = new CsdnBlog();
         csdnBlog2.setAuthor("BBBB");
@@ -135,7 +138,8 @@ public class JestUtil {
         csdnBlog2.setDate(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(new Date()));
         csdnBlog2.setView("200");
         csdnBlog2.setTag("JAVA,ANDROID,C++,LINUX");
-
+        csdnBlog2.setNum(100);
+        csdnBlog2.setPrice(120.12);
 
         CsdnBlog csdnBlog3 = new CsdnBlog();
         csdnBlog3.setAuthor("CCCC");
@@ -144,6 +148,8 @@ public class JestUtil {
         csdnBlog3.setDate(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(new Date()));
         csdnBlog3.setView("300");
         csdnBlog3.setTag("JAVA,ANDROID,C++,LINUX");
+        csdnBlog3.setNum(100);
+        csdnBlog3.setPrice(120.12);
 
         CsdnBlog csdnBlog4 = new CsdnBlog();
         csdnBlog4.setAuthor("CCCC");
@@ -152,6 +158,8 @@ public class JestUtil {
         csdnBlog4.setDate(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(new Date()));
         csdnBlog4.setView("400");
         csdnBlog4.setTag("JAVA,ANDROID,C++,LINUX");
+        csdnBlog4.setNum(100);
+        csdnBlog4.setPrice(120.12);
 
 
         Index index1 = new Index.Builder(csdnBlog1).index("article").type("article").build();
@@ -165,7 +173,7 @@ public class JestUtil {
         System.out.println(jestResult2.getJsonString());
         JestResult jestResult3 = jestClient.execute(index3);
         System.out.println(jestResult3.getJsonString());
-        JestResult jestResult4 = jestClient.execute(index3);
+        JestResult jestResult4 = jestClient.execute(index4);
         System.out.println(jestResult4.getJsonString());
     }
 
@@ -430,13 +438,13 @@ public class JestUtil {
     @Test
     public void count() throws Exception {
 
-        String[] name = new String[]{"T:o\"m-", "Jerry","AAAA"};
+        String[] name = new String[]{"T:o\"m-", "Jerry", "AAAA"};
         String from = "2016-09-01";
         String to = "2019-10-01T00:00:00";
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 
         QueryBuilder queryBuilder = QueryBuilders.boolQuery()
-                .must(QueryBuilders.matchQuery("author","CCCC"))
+                .must(QueryBuilders.matchQuery("author", "CCCC"))
 //                .must(QueryBuilders.termsQuery("name", name))
                 .must(QueryBuilders.rangeQuery("date").gte(from).lte(to));
         searchSourceBuilder.query(queryBuilder);
@@ -455,7 +463,7 @@ public class JestUtil {
         query = searchSourceBuilder.toString();
 
         Search search = new Search.Builder(query).build();
-        System.out.println("research:"+query);
+        System.out.println("research:" + query);
         SearchResult searchResult = jestClient.execute(search);
 
         Double counts = results.getCount();

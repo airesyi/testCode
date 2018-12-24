@@ -66,4 +66,11 @@ public class SOAR {
         return result.toString();
     }
 
+    @Test
+    public void testSysEnv() {
+        System.out.println(System.getenv("JAVA_HOME"));
+        System.out.println(System.getenv("GOROOT"));
+        System.out.println(System.getenv("GOPATH"));
+    }
+
 }

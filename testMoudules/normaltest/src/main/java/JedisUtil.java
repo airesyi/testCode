@@ -445,7 +445,7 @@ public class JedisUtil {
         init("127.0.0.1:6379");
         ShardedJedis client = getInstance();
 //        client.hincrBy("key", "acda", 1);
-        client.set("a", "value");
+        client.set("a", null);
         client.set("b", "value");
         client.set("c", "value");
     }
@@ -455,7 +455,7 @@ public class JedisUtil {
         init("127.0.0.1:6379");
         ShardedJedis client = getInstance();
 //        client.hincrBy("key", "acda", 1);
-        String[] strs = new String[] {"a","b","c"};
+        String[] strs = new String[]{"a", "b", "c"};
         Collection<Jedis> jediss = client.getAllShards();
         for (Jedis jedis : jediss) {
             jedis.del(strs);
@@ -465,5 +465,12 @@ public class JedisUtil {
     @Test
     public void test5() {
         System.out.println(null + "feq");
+    }
+
+    @Test
+    public void test6() {
+        init("127.0.0.1:6379");
+        ShardedJedis client = getInstance();
+        System.out.println(client instanceof Object);
     }
 }

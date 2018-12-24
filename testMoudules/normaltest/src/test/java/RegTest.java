@@ -28,4 +28,22 @@ public class RegTest {
         url = url.replaceAll(reg, "$1$2_"+"200x200"+".$2");
         System.out.println(url);
     }
+
+    @Test
+    public void test7() {
+        String aaa = "key1:aaa,key2：value2，key3:自洪文自洪文";
+        String[] result = aaa.split("[w|x]");
+        aaa = aaa.replaceAll("(key1)([:|：])", "zzz$2");
+
+        System.out.println(aaa);
+    }
+
+    @Test
+    public void test8() {
+
+        System.out.println(String.format("%03d", 1));
+        System.out.println(String.format("%03d", 12));
+        System.out.println(String.format("%03d", 123));
+
+    }
 }

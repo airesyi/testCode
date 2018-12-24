@@ -15,9 +15,9 @@ public class LDAPtest {
     private LdapContext connetLDAP() throws NamingException {
         // 连接Ldap需要的信息
         String ldapFactory = "com.sun.jndi.ldap.LdapCtxFactory";
-        String ldapUrl = "ldap://127.0.0.1:389";// url
-        String ldapAccount = "abc\\t1"; // 用户名
-        String ldapPwd = "1234567";//密码
+        String ldapUrl = "ldap://domain.xinboxinmo.:389";// url
+        String ldapAccount = "UMallscaner@xinboxinmo.com"; // 用户名
+        String ldapPwd = "Xbxm2018***";//密码
 
 
 //        String ldapUrl = "ldap://127.0.0.1:389";// url
