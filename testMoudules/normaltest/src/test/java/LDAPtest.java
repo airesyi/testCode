@@ -15,9 +15,9 @@ public class LDAPtest {
     private LdapContext connetLDAP() throws NamingException {
         // 连接Ldap需要的信息
         String ldapFactory = "com.sun.jndi.ldap.LdapCtxFactory";
-        String ldapUrl = "ldap://****:389";// url
-        String ldapAccount = "******"; // 用户名
-        String ldapPwd = "*******";//密码
+        String ldapUrl = "ldap://domain.xinboxinmo.com:389";// url
+        String ldapAccount = "UMallscaner@xinboxinmo.com"; // 用户名
+        String ldapPwd = "Xbxm2018***";//密码
 
 
 //        String ldapUrl = "ldap://127.0.0.1:389";// url
@@ -96,7 +96,7 @@ public class LDAPtest {
 //        NamingEnumeration<SearchResult> answer = ctx.search("cn=operate,dc=abc,dc=com", filter,null);
         List<NamingEnumeration<SearchResult>> list = new ArrayList<NamingEnumeration<SearchResult>>();
 
-        NamingEnumeration<SearchResult> answer = ctx.search("cn=operate,dc=abc,dc=com", null);
+        NamingEnumeration<SearchResult> answer = ctx.search("OU=新博新美集团,DC=xinboxinmo,DC=com", null);
         // 输出查到的数据
         while (answer.hasMore()) {
             SearchResult result = answer.next();
