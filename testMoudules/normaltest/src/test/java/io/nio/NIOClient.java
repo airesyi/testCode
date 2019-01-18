@@ -41,14 +41,17 @@ public class NIOClient {
         }
         StringBuffer stringBuffer=new StringBuffer();
         //如果read（）接收到-1，表明服务端关闭，抛出异常
+        System.out.println("connect:"+clntChan.isConnected());
+
         while ((clntChan.read(readBuf)) >0){
             readBuf.flip();
             stringBuffer.append(new String(readBuf.array(),0,readBuf.limit()));
             readBuf.clear();
         }
-
+        System.out.println("block:"+clntChan.isBlocking());
         //打印出接收到的数据
         System.out.println("Client Received: " +  stringBuffer.toString());
+        System.out.println("finish connect:"+clntChan.finishConnect());
         //关闭信道
         clntChan.close();
     }

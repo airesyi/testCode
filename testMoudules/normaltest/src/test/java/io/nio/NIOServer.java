@@ -6,6 +6,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.util.Iterator;
+import java.util.concurrent.TimeUnit;
 
 /**
  * auth: shi yi
@@ -14,7 +15,7 @@ import java.util.Iterator;
 public class NIOServer {
     private static int BUFF_SIZE=1024;
     private static int TIME_OUT = 2000;
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
 
         Selector selector = Selector.open();
         ServerSocketChannel serverSocketChannel=ServerSocketChannel.open();
@@ -43,6 +44,7 @@ public class NIOServer {
                 }
                 //如果该键值有效，并且其对应的客户端信道感兴趣的I/O操作为write
                 if (key.isValid() && key.isWritable()) {
+                    TimeUnit.SECONDS.sleep(1000);
                     protocol.handleWrite(key);
                 }
 
